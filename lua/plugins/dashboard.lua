@@ -1,0 +1,32 @@
+if true then return {} end 
+--return {
+--  "folke/snacks.nvim",
+--  opts = {
+--    dashboard = {
+--      preset = {
+--        header = table.concat({
+--          "My Custom",
+--          "Dashboard Header",
+--        }, "\n"),
+--      },
+--    },
+--  },
+
+
+--  "folke/snacks.nvim",
+--  opts = {
+--    dashboard = {
+--      preset = {
+--        keys = {
+--          {
+--            key = "h",
+--            action = function()
+--              vim.notify("Hello World!")
+--            end,
+--            desc = "Say Hi",
+--          },
+--        },
+--      },
+--    },
+--  },
+--}
