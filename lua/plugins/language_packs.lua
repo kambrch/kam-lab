@@ -20,6 +20,16 @@ return {
     import = "astrocommunity.pack.markdown",
     ft = { "markdown", "md", "mdx" },
   },
+  -- Python tooling should load for Python buffers.
+  {
+    import = "astrocommunity.pack.python",
+    ft = { "python" },
+  },
+  -- SQL tooling for SQL buffers.
+  {
+    import = "astrocommunity.pack.sql",
+    ft = { "sql" },
+  },
   -- CSV helpers load only for CSV editing workflows.
   {
     import = "astrocommunity.programming-language-support.csv-vim",
