@@ -5,6 +5,23 @@
 -- Sync all yanks to the system clipboard.
 vim.opt.clipboard = "unnamedplus"
 
+local python = require "utils.python"
+
+-- Keep Python provider aligned with current project environment.
+local function refresh_python_host_prog(args)
+  local buffer_name = args and args.buf and vim.api.nvim_buf_get_name(args.buf) or nil
+  local root = python.find_root(buffer_name)
+  local python_path = python.resolve_python(root)
+  if python_path and python_path ~= "" then vim.g.python3_host_prog = python_path end
+end
+
+refresh_python_host_prog()
+
+vim.api.nvim_create_autocmd({ "BufEnter", "DirChanged" }, {
+  callback = refresh_python_host_prog,
+  desc = "Refresh Python provider path for project",
+})
+
 -- Enable spell checking for specific file types
 vim.api.nvim_create_autocmd("FileType", {
   pattern = { "text", "markdown", "md", "tex", "latex", "plaintex", "rst", "asciidoc", "org", "mail" },
@@ -12,9 +29,9 @@ vim.api.nvim_create_autocmd("FileType", {
     vim.opt_local.spell = true
     -- Check if Polish spell file is available, otherwise use only English
     local spell_dir = vim.fn.stdpath("data") .. "/site/spell"
-    local pl_spell_available = vim.fn.isdirectory(spell_dir) == 1 and 
+    local pl_spell_available = vim.fn.isdirectory(spell_dir) == 1 and
                               (vim.fn.glob(spell_dir .. "/pl.*.spl") ~= "")
-    
+
     if pl_spell_available then
       vim.opt_local.spelllang = { "en", "pl" }  -- English and Polish
     else

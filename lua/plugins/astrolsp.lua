@@ -84,15 +84,15 @@ return {
           desc = "Declaration of current symbol",
           cond = "textDocument/declaration",
         },
-        ["<Leader>uY"] = {
-          function() require("astrolsp.toggles").buffer_semantic_tokens() end,
-          desc = "Toggle LSP semantic highlight (buffer)",
-          cond = function(client)
-            return client.supports_method "textDocument/semanticTokens/full" and vim.lsp.semantic_tokens ~= nil
-          end,
+          ["<Leader>uY"] = {
+            function() require("astrolsp.toggles").buffer_semantic_tokens() end,
+            desc = "Toggle LSP semantic highlight (buffer)",
+            cond = function(client)
+              return client:supports_method "textDocument/semanticTokens/full" and vim.lsp.semantic_tokens ~= nil
+            end,
+          },
         },
       },
-    },
     -- A custom `on_attach` function to be run after the default `on_attach` function
     -- takes two parameters `client` and `bufnr`  (`:h lspconfig-setup`)
     on_attach = function(client, bufnr)
