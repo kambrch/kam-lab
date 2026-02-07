@@ -29,15 +29,24 @@ vim.api.nvim_create_autocmd("FileType", {
     vim.opt_local.spell = true
     -- Check if Polish spell file is available, otherwise use only English
     local spell_dir = vim.fn.stdpath("data") .. "/site/spell"
-    local pl_spell_available = vim.fn.isdirectory(spell_dir) == 1 and
-                              (vim.fn.glob(spell_dir .. "/pl.*.spl") ~= "")
+    
+    -- Ensure the spell directory exists before checking for Polish files
+    local spell_dir_exists = vim.fn.isdirectory(spell_dir) == 1
+    
+    -- Check for both .spl (spell) and .sug (suggestions) files
+    local pl_spell_available = false
+    if spell_dir_exists then
+      local spl_files = vim.fn.glob(spell_dir .. "/pl.*.spl", false, true) -- return as list
+      local sug_files = vim.fn.glob(spell_dir .. "/pl.*.sug", false, true) -- return as list
+      pl_spell_available = #spl_files > 0 or #sug_files > 0
+    end
 
     if pl_spell_available then
       vim.opt_local.spelllang = { "en", "pl" }  -- English and Polish
     else
       vim.opt_local.spelllang = "en"  -- Only English if Polish is not available
-      -- Optionally notify user that Polish spell check is not available
-      vim.notify("Polish spell check not available. Install Polish spell files to enable.", vim.log.levels.WARN)
+      -- Notify user that Polish spell check is not available
+      vim.notify_once("Polish spell check not available. Install Polish spell files to enable.", vim.log.levels.WARN, { title = "Spell Checker" })
     end
   end,
   desc = "Enable English and Polish spell checking for text files",
