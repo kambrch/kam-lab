@@ -54,6 +54,26 @@ return {
     end,
   },
 
+  -- Wayland clipboard support
+  {
+    "ojroques/nvim-osc52",
+    enabled = vim.fn.executable("wl-copy") == 1 and vim.fn.executable("wl-paste") == 1,
+    opts = {
+      -- Allows copy to system clipboard using OSC 52 escape sequence
+      max_length = 0, -- Maximum length of selection (0 for no limit)
+    },
+    config = function(_, opts)
+      require('osc52').setup(opts)
+      -- Set up automatic sync of yanks to system clipboard
+      vim.api.nvim_create_autocmd('TextYankPost', {
+        callback = function()
+          require('osc52').copy_visual_selection()
+        end,
+        desc = 'Copy selection to system clipboard',
+      })
+    end,
+  },
+
   {
     "windwp/nvim-autopairs",
     config = function(plugin, opts)
